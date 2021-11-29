@@ -89,12 +89,12 @@ extension Response {
 }
 
 // MARK:- Json -> ResultStatus
-extension Response {
+public extension Response {
     /// Response -> MoyaMapperResult
     ///
     /// - Parameter params: 自定义解析的设置回调
     /// - Returns: MoyaMapperResult
-    public func mapResult(params: ModelableParamsBlock? = nil) -> MoyaMapperResult {
+     func mapResult(params: ModelableParamsBlock? = nil) -> MoyaMapperResult {
         let result = JSON(data)
         let parameter = params != nil ? params!() : lxf_modelableParameter
         let resCodeKey = parameter.statusCodeKey
@@ -112,7 +112,7 @@ extension Response {
     ///   - path: JSON数据路径 (默认为模型数据路径)
     ///   - keys: 目标数据子路径  (例： [0, "_id"])
     /// - Returns: 接口返回的状态码
-    public func fetchStatusCode(
+   func fetchStatusCode(
         path: String? = nil,
         keys: [JSONSubscriptType] = []
     ) -> String {
@@ -122,14 +122,14 @@ extension Response {
 }
 
 // MARK: - Json -> Model
-extension Response {
+public extension Response {
     /// Response -> Model
     ///
     /// - Parameters:
     ///   - type: 模型类型
     ///   - modelKey: 模型数据路径
     /// - Returns: 模型
-    public func mapObject<T: Modelable>(
+ func mapObject<T: Modelable>(
         _ type: T.Type,
         modelKey: String? = nil
     ) -> T {
@@ -143,7 +143,7 @@ extension Response {
     ///   - type: 模型类型
     ///   - params: 自定义解析的设置回调
     /// - Returns: (MoyaMapperResult, Model)
-    public func mapObjResult<T: Modelable>(
+     func mapObjResult<T: Modelable>(
         _ type: T.Type,
         params: ModelableParamsBlock? = nil
     ) -> (MoyaMapperResult, T) {
@@ -156,7 +156,7 @@ extension Response {
 }
 
 // MARK: - Json -> Models
-extension Response {
+public extension Response {
     // 将Json解析为多个Model，返回数组，对于不同的json格式需要对该方法进行修改
     
     /// Response -> [Model]
@@ -165,7 +165,7 @@ extension Response {
     ///   - type: 模型类型
     ///   - modelKey: 模型路径
     /// - Returns: 模型数组
-    public func mapArray<T: Modelable>(
+     func mapArray<T: Modelable>(
         _ type: T.Type,
         modelKey: String? = nil
     ) -> [T] {
@@ -180,7 +180,7 @@ extension Response {
     ///   - type: 模型类型
     ///   - params: 自定义解析的设置回调
     /// - Returns: (MoyaMapperResult, [Model])
-    public func mapArrayResult<T: Modelable>(
+    func mapArrayResult<T: Modelable>(
         _ type: T.Type,
         params: ModelableParamsBlock? = nil
     ) -> (MoyaMapperResult, [T]) {
@@ -194,7 +194,7 @@ extension Response {
 }
 
 // MARK:- runtime
-extension Response {
+public extension Response {
     // 主要用于 catchError
     
     /// 创建Response
@@ -203,7 +203,7 @@ extension Response {
     ///   - dataDict: 数据字典
     ///   - statusCode: 状态码
     ///   - parameterType: ModelableParameterType
-    public convenience init(
+ convenience init(
         _ dataDict: [String: Any],
         statusCode: Int,
         parameter: ModelableParameterType
@@ -216,14 +216,14 @@ extension Response {
     /// 设置数据解析参数
     ///
     /// - Parameter type: ModelableParameterType
-    public func setNetParameter(_ type: ModelableParameterType) {
+     func setNetParameter(_ type: ModelableParameterType) {
         self.lxf_modelableParameter = type
     }
     
     private struct AssociatedKeys {
         static var lxf_modelableParameterKey = "lxf_modelableParameterKey"
     }
-    public internal(set) var lxf_modelableParameter: ModelableParameterType {
+   internal(set) var lxf_modelableParameter: ModelableParameterType {
         get {
             // https://stackoverflow.com/questions/42033735/failing-cast-in-swift-from-any-to-protocol/42034523#42034523
             let value = objc_getAssociatedObject(self, &AssociatedKeys.lxf_modelableParameterKey) as AnyObject
